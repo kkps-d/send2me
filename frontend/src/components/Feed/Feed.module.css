@@ -1,0 +1,54 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  overflow-y: auto;
+  flex-grow: 1;
+}
+
+.dateDivider {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  color: var(--date-divider-color);
+  margin-bottom: 5px;
+}
+
+.dateDivider::before,
+.dateDivider::after {
+  content: "";
+  flex: 1;
+  max-width: 150px;
+  height: 1px;
+  background: var(--date-divider-color);
+}
+
+.feedMessage {
+  display: flex;
+  flex-direction: column;
+}
+
+.container > .feedMessage:nth-of-type(odd) {
+  background-color: var(--feed-message-background-color);
+}
+
+.container > .feedMessage:nth-of-type(even) {
+  background-color: var(--feed-message-background-color-alt);
+}
+
+.feedContent {
+  padding: 10px;
+  box-sizing: border-box;
+  white-space: pre-wrap;
+  text-wrap: all;
+}
+
+.feedMessageButton {
+  padding-left: 10px;
+  color: var(--feed-message-button-color);
+}
+
+.feedMessageButtonSeparator::before {
+  content: "•";
+}
