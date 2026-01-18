@@ -88,6 +88,8 @@ body,
   box-sizing: border-box;
   padding: 0 6px;
   transition: background-color 100ms;
+  justify-content: center;
+  user-select: none;
 }
 
 .basebutton:hover {
@@ -95,12 +97,42 @@ body,
 }
 
 .baseinput {
-  height: 38px;
   box-sizing: border-box;
   border: none;
+}
+
+.baseinput[type="text"],
+.baseinput[type="search"],
+.baseinput[type="password"] {
   border-bottom: 1px solid var(--input-border-color);
   background-color: var(--input-background-color);
   padding: 0px 8px;
+  height: 38px;
+}
+
+.baseinput[type="checkbox"] {
+  cursor: pointer;
+  margin: 10px 0;
+  width: 20px;
+  height: 20px;
+  border: 1px solid var(--input-border-color);
+  background-color: var(--input-background-color);
+}
+
+.baseinputgroup {
+  display: flex;
+  max-width: 300px;
+  gap: 5px;
+}
+
+.baseinputgroup.v {
+  flex-direction: column;
+  justify-content: center;
+}
+
+.baseinputgroup.h {
+  flex-direction: row;
+  align-items: center;
 }
 
 small {

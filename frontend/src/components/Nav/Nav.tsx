@@ -2,6 +2,7 @@ import styles from "./Nav.module.css";
 import { FlexSpacer } from "../FlexSpacer/FlexSpacer";
 import { getPreferredColorScheme } from "../../utils/getPreferredColorScheme";
 import { useState } from "react";
+import { Logo } from "../Logo/Logo";
 
 export function Nav() {
   const [colorTheme, setColorTheme] = useState<"light" | "dark">(
@@ -33,19 +34,6 @@ export function Nav() {
         )}
       </div>
       <input className={`baseinput`} type="search" placeholder="Search..." />
-    </div>
-  );
-}
-function Logo() {
-  return (
-    <div
-      style={{
-        fontFamily: "Montserrat",
-        fontWeight: "bold",
-        fontSize: "1.2rem",
-      }}
-    >
-      Send2Me
     </div>
   );
 }
