@@ -1,0 +1,23 @@
+meta {
+  name: Register
+  type: http
+  seq: 1
+}
+
+post {
+  url: http://localhost:5183/api/auth/register
+  body: json
+  auth: inherit
+}
+
+body:json {
+  {
+    "username": "zazademon",
+    "password": "qazwsxedc"
+  }
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}
