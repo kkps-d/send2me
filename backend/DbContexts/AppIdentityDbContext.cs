@@ -1,8 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
-namespace backend.Auth
+namespace backend.DbContexts
 {
     public class AppIdentityDbContext : IdentityDbContext
     {
