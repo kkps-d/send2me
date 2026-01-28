@@ -3,29 +3,29 @@ using System.Security.Claims;
 
 namespace backend.Middlewares
 {
-    public class TokenAuthenticationMiddleware
+    public class TokenAuthenticationMiddleware(RequestDelegate next)
     {
-        private readonly RequestDelegate _next;
-        private readonly AuthTokenService _tokenService;
-
-        public TokenAuthenticationMiddleware(RequestDelegate next, AuthTokenService tokenService)
-        {
-            _next = next;
-            _tokenService = tokenService;
-        }
+        private readonly RequestDelegate _next = next;
 
         public async Task InvokeAsync(HttpContext context)
         {
             if (context.Request.Headers.TryGetValue("Authorization", out var tokenHeader))
             {
-                var token = tokenHeader.ToString().Replace("Bearer ", "");
-                if (_tokenService.ValidateToken(token, out string userId))
+                AuthnService authnService = context.RequestServices.GetRequiredService<AuthnService>();
+
+                string token = tokenHeader.ToString().Replace("Bearer ", "");
+                string? username = await authnService.GetUsernameFromToken(token);
+
+                if (!string.IsNullOrEmpty(username))
                 {
-                    var claims = new List<Claim> { new(ClaimTypes.NameIdentifier, userId) };
+                    // TODO: Later fetch more claims for permissions from AuthzService once implemented
+                    var claims = new List<Claim> { new(ClaimTypes.NameIdentifier, username) };
                     var identity = new ClaimsIdentity(claims, "Token");
                     context.User = new ClaimsPrincipal(identity);
                 }
             }
+
+            // If no authorization header, still let request continue, as there are unauthenticated endpoints. Authenticated endpoints with [Authorize] attribute should block it
 
             await _next(context);
         }

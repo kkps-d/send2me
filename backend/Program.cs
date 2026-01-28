@@ -1,6 +1,7 @@
 
 using backend.Auth;
 using backend.Middlewares;
+using backend.Services.Auth;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
@@ -16,18 +17,15 @@ namespace backend
             string appDataDbPath = Path.Join(basePath, "appData.db").ToString();
 
 
-            /* Dependency Injection Section */
-
+            #region Dependency injection
             var builder = WebApplication.CreateBuilder(args);
-
-            // Database Contexts
+            // Database
             builder.Services.AddDbContext<AppIdentityDbContext>(
                 builderOptions =>
                 {
                     builderOptions.UseSqlite($"Data Source={appIdentityDbPath}");
                 }
             );
-
             // Auth
             builder.Services.AddAuthorization();
             builder.Services.AddIdentity<IdentityUser, IdentityRole>(options =>
@@ -44,27 +42,28 @@ namespace backend
             })
             .AddEntityFrameworkStores<AppIdentityDbContext>()
             .AddDefaultTokenProviders();
-            builder.Services.AddSingleton<Services.Auth.AuthTokenService>();
-
-            // Route Controllers
+            builder.Services.AddSingleton<ITokenStore, InMemoryTokenStore>();
+            builder.Services.AddScoped<AuthnService>();
+            // Route Controllers + Swagger
             builder.Services.AddControllers();
             builder.Services.AddEndpointsApiExplorer(); // Scans app for APIs and produces metadata
             builder.Services.AddSwaggerGen(); // Consumes above metadata to create openapi doc
+            #endregion
 
-
-            /* Middleware Section */
-
+            #region HTTP Request Pipeline
             var app = builder.Build();
             if (app.Environment.IsDevelopment())
             {
                 app.UseSwagger(); // adds endpoint to call the swaggergen service
-                //app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "Backend API")); // serves the swagger ui, specified endpoint is the path of the generated openapi doc
                 app.UseSwaggerUI();
             }
             app.UseHttpsRedirection();
-            app.UseAuthorization();
+            app.UseRouting();
+            app.UseAuthentication();
             app.UseMiddleware<TokenAuthenticationMiddleware>();
+            app.UseAuthorization();
             app.MapControllers();
+            #endregion
 
             app.Run();
         }

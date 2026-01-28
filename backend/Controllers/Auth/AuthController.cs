@@ -1,52 +1,41 @@
 ﻿using backend.DTOs.Auth;
 using backend.Services.Auth;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
 namespace backend.Controllers.Auth
 {
     [Route("api/auth")]
     [ApiController]
-    public class AuthController : ControllerBase
+    public class AuthController(
+        AuthnService authService
+        ) : ControllerBase
     {
-        private readonly UserManager<IdentityUser> _userManager;
-        private readonly SignInManager<IdentityUser> _signInManager;
-        private readonly AuthTokenService _tokenService;
-
-        public AuthController(
-            UserManager<IdentityUser> userManager,
-            SignInManager<IdentityUser> signInManager,
-            AuthTokenService tokenService)
-        {
-            _userManager = userManager;
-            _signInManager = signInManager;
-            _tokenService = tokenService;
-        }
+        private AuthnService _authService = authService;
 
         [HttpPost("register")]
         public async Task<IActionResult> Register([FromBody] RegisterDto dto)
         {
-            IdentityUser user = new() { UserName = dto.UserName };
-            IdentityResult result = await _userManager.CreateAsync(user, dto.Password);
+            RegisterResult result = await _authService.RegisterUser(dto.UserName, dto.Password);
 
-            if (!result.Succeeded)
-                return BadRequest(result.Errors);
+            if (!result.IsSuccess)
+            {
+                return BadRequest(result.ErrorPayload);
+            }
 
-            return Ok(new { dto.UserName });
+            return Ok(new { username = dto.UserName });
         }
 
         [HttpPost("login")]
         public async Task<IActionResult> Login([FromBody] LoginDto dto)
         {
-            Microsoft.AspNetCore.Identity.SignInResult result = await _signInManager.PasswordSignInAsync(dto.UserName, dto.Password, false, false);
+            CreateSessionResult result = await _authService.CreateSession(dto.UserName, dto.Password);
 
-            if (!result.Succeeded)
-                return Unauthorized(new { Message = "Invalid username or password" });
+            if (!result.IsSuccess)
+            {
+                return Unauthorized(new { errorCode = result.ErrorCode.ToString() });
+            }
 
-            IdentityUser? user = await _userManager.FindByNameAsync(dto.UserName);
-            string token = _tokenService.GenerateToken(user!.Id);
-
-            return Ok(new { Token = token });
+            return Ok(new { token = result.Payload });
         }
     }
 }
