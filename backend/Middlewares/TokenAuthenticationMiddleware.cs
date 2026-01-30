@@ -9,20 +9,26 @@ namespace backend.Middlewares
 
         public async Task InvokeAsync(HttpContext context)
         {
-            if (context.Request.Headers.TryGetValue("Authorization", out var tokenHeader))
+            string? username = null;
+
+            if (context.Request.Cookies.TryGetValue("sessionToken", out string? sessionToken))
             {
                 AuthnService authnService = context.RequestServices.GetRequiredService<AuthnService>();
-
+                username = await authnService.GetUsernameFromToken(sessionToken);
+            }
+            else if (context.Request.Headers.TryGetValue("Authorization", out var tokenHeader))
+            {
+                AuthnService authnService = context.RequestServices.GetRequiredService<AuthnService>();
                 string token = tokenHeader.ToString().Replace("Bearer ", "");
-                string? username = await authnService.GetUsernameFromToken(token);
+                username = await authnService.GetUsernameFromToken(token);
+            }
 
-                if (!string.IsNullOrEmpty(username))
-                {
-                    // TODO: Later fetch more claims for permissions from AuthzService once implemented
-                    var claims = new List<Claim> { new(ClaimTypes.NameIdentifier, username) };
-                    var identity = new ClaimsIdentity(claims, "Token");
-                    context.User = new ClaimsPrincipal(identity);
-                }
+            if (!string.IsNullOrEmpty(username))
+            {
+                // TODO: Later fetch more claims for permissions from AuthzService once implemented
+                var claims = new List<Claim> { new(ClaimTypes.NameIdentifier, username) };
+                var identity = new ClaimsIdentity(claims, "Token");
+                context.User = new ClaimsPrincipal(identity);
             }
 
             // If no authorization header, still let request continue, as there are unauthenticated endpoints. Authenticated endpoints with [Authorize] attribute should block it

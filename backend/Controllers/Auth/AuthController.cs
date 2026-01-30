@@ -35,7 +35,29 @@ namespace backend.Controllers.Auth
                 return Unauthorized(new { errorCode = result.ErrorCode.ToString() });
             }
 
-            return Ok(new { token = result.Payload });
+            string sessionToken = result.Payload!;
+            bool wantsCookie = Request.Headers.Accept.Any(h => h.Contains("text/html"));
+
+            if (wantsCookie)
+            {
+                // This is for browsers, will push a cookie
+                Response.Cookies.Append(
+                    "sessionToken",
+                    sessionToken,
+                    new CookieOptions
+                    {
+                        HttpOnly = true,
+                        Secure = true,
+                        SameSite = SameSiteMode.Lax,
+                        Path = "/",
+                        Expires = DateTime.UtcNow.AddMinutes(3600)
+                    }
+                );
+
+                return Ok();
+            }
+
+            return Ok(new { sessionToken = result.Payload });
         }
     }
 }
