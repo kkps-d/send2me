@@ -40,7 +40,7 @@ namespace backend.Services.Auth
                 return CreateSessionResult.Failure(AuthnServiceErrorCode.WrongUsernamePassword, None.Value);
             }
 
-            string token = await _tokenStore.CreateTokenAsync(user!.Id);
+            string token = await _tokenStore.CreateTokenAsync(username);
 
             return CreateSessionResult.Success(token);
         }
