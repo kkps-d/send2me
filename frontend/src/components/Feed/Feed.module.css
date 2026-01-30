@@ -47,6 +47,7 @@
 .feedMessageButton {
   padding-left: 10px;
   color: var(--feed-message-button-color);
+  justify-content: flex-start;
 }
 
 .feedMessageButtonSeparator::before {
