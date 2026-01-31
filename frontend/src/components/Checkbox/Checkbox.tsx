@@ -28,7 +28,7 @@ export function Checkbox({
         className={styles.hiddenCheckbox}
         tabIndex={tabIndex}
         checked={checked}
-        onClick={() => toggleChecked()}
+        onChange={() => toggleChecked()}
       />
       <div className={`${styles.checkbox}`}>
         {checkedState && (
