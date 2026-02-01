@@ -1,0 +1,27 @@
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.container {
+  width: 1em;
+  height: 1em;
+  display: inline-block;
+  border-radius: 50%;
+  background: conic-gradient(from 0deg, rgba(255, 255, 255, 0), white);
+
+  /* cut out the center to make it a ring */
+  -webkit-mask: radial-gradient(
+    farthest-side,
+    transparent calc(100% - 0.15em),
+    black 0
+  );
+  mask: radial-gradient(
+    farthest-side,
+    transparent calc(100% - 0.15em),
+    black 0
+  );
+
+  animation: spin 1s linear infinite;
+}
