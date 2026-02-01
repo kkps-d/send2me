@@ -16,3 +16,8 @@
 .container:hover {
   background-color: var(--button-hovered-background-color);
 }
+
+.disabled {
+  color: var(--button-disabled-color);
+  pointer-events: none;
+}

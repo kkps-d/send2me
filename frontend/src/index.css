@@ -59,6 +59,7 @@
 
   --button-background-color: light-dark(white, black);
   --button-hovered-background-color: light-dark(lightgray, #333);
+  --button-disabled-color: gray;
 
   /* Presets */
 }

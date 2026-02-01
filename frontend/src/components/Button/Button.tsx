@@ -9,6 +9,7 @@ type ButtonProps = {
   loading?: boolean;
   icon?: React.ReactNode;
   iconPosition?: "before" | "after";
+  disabled?: boolean;
 };
 
 export function Button({
@@ -19,6 +20,7 @@ export function Button({
   loading = false,
   icon,
   iconPosition = "before",
+  disabled = false,
 }: ButtonProps) {
   const _icon = loading ? <Spinner /> : icon || null;
 
@@ -26,7 +28,7 @@ export function Button({
     <button
       onClick={onClick}
       tabIndex={tabIndex}
-      className={`${className} ${styles.container}`}
+      className={`${className} ${styles.container} ${disabled ? styles.disabled : ""}`}
     >
       {iconPosition === "before" && _icon}
       {label}
