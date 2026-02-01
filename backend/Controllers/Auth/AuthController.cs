@@ -7,10 +7,12 @@ namespace backend.Controllers.Auth
     [Route("api/v1/auth")]
     [ApiController]
     public class AuthController(
-        AuthnService authService
+        AuthnService authService,
+        IWebHostEnvironment env
         ) : ControllerBase
     {
         private AuthnService _authService = authService;
+        private IWebHostEnvironment _env = env;
 
         [HttpPost("register")]
         public async Task<IActionResult> Register([FromBody] RegisterDto dto)
@@ -48,7 +50,7 @@ namespace backend.Controllers.Auth
                     {
                         HttpOnly = true,
                         Secure = true,
-                        SameSite = SameSiteMode.Lax,
+                        SameSite = _env.IsDevelopment() ? SameSiteMode.None : SameSiteMode.Lax,
                         Path = "/",
                         Expires = DateTime.UtcNow.AddMinutes(3600)
                     }
