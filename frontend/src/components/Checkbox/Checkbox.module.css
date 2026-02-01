@@ -23,7 +23,7 @@
 }
 
 .hiddenCheckbox {
-  all: unset;
+  appearance: none;
   position: absolute;
   width: 100%;
   height: 100%;
