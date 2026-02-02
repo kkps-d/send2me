@@ -13,7 +13,7 @@ type ButtonProps = {
 };
 
 export function Button({
-  label = "Button",
+  label,
   onClick = () => {},
   className,
   tabIndex = 0,
