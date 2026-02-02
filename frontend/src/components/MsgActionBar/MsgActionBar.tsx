@@ -1,3 +1,4 @@
+import { Button } from "../Button/Button";
 import { FlexSpacer } from "../FlexSpacer/FlexSpacer";
 import styles from "./MsgActionBar.module.css";
 
@@ -10,19 +11,20 @@ export function MsgActionBar() {
         placeholder="Type something, or drop files here"
       />
       <div className={styles.buttonGroup}>
-        <div className="basebutton">
-          <span className="material-symbols-outlined">attach_file</span>
-          Attach files
-        </div>
+        <Button
+          label="Attach Files"
+          icon={<span className="material-symbols-outlined">attach_file</span>}
+        />
         <FlexSpacer />
-        <div className="basebutton">
-          <span className="material-symbols-outlined">close</span>
-          Clear
-        </div>
-        <div className="basebutton">
-          Send
-          <span className="material-symbols-outlined">send</span>
-        </div>
+        <Button
+          label="Clear"
+          icon={<span className="material-symbols-outlined">close</span>}
+        />
+        <Button
+          label="Send"
+          iconPosition="after"
+          icon={<span className="material-symbols-outlined">send</span>}
+        />
       </div>
     </div>
   );
