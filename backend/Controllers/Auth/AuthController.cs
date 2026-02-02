@@ -1,5 +1,6 @@
 ﻿using backend.DTOs.Auth;
 using backend.Services.Auth;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace backend.Controllers.Auth
@@ -60,6 +61,19 @@ namespace backend.Controllers.Auth
             }
 
             return Ok(new { sessionToken = result.Payload });
+        }
+
+        [Authorize]
+        [HttpPost("logout")]
+        public async Task<IActionResult> Logout()
+        {
+            HttpContext.Items.TryGetValue("sessionToken", out var obj);
+
+            string sessionToken = obj!.ToString()!;
+
+            await _authService.DestroySessionByToken(sessionToken);
+
+            return Ok();
         }
     }
 }

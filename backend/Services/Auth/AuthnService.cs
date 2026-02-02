@@ -50,14 +50,14 @@ namespace backend.Services.Auth
             return await _tokenStore.GetUsernameByTokenAsync(token);
         }
 
-        //public async Task DestroySessionByToken(string token)
-        //{
-        //    // To be implemented
-        //}
+        public async Task DestroySessionByToken(string token)
+        {
+            await _tokenStore.RevokeTokenByTokenStringAsync(token);
+        }
 
         //public async Task DestroySessionsByUsername(string username)
         //{
-        //    // To be implemented
+        //    await _tokenStore.RevokeTokensByUserNameAsync(username);
         //}
     }
 
