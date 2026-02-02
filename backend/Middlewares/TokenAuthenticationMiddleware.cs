@@ -10,8 +10,9 @@ namespace backend.Middlewares
         public async Task InvokeAsync(HttpContext context)
         {
             string? username = null;
+            string? sessionToken = null;
 
-            if (context.Request.Cookies.TryGetValue("sessionToken", out string? sessionToken))
+            if (context.Request.Cookies.TryGetValue("sessionToken", out sessionToken))
             {
                 AuthnService authnService = context.RequestServices.GetRequiredService<AuthnService>();
                 username = await authnService.GetUsernameFromToken(sessionToken);
@@ -19,16 +20,19 @@ namespace backend.Middlewares
             else if (context.Request.Headers.TryGetValue("Authorization", out var tokenHeader))
             {
                 AuthnService authnService = context.RequestServices.GetRequiredService<AuthnService>();
-                string token = tokenHeader.ToString().Replace("Bearer ", "");
-                username = await authnService.GetUsernameFromToken(token);
+                sessionToken = tokenHeader.ToString().Replace("Bearer ", "");
+                username = await authnService.GetUsernameFromToken(sessionToken);
             }
 
             if (!string.IsNullOrEmpty(username))
             {
                 // TODO: Later fetch more claims for permissions from AuthzService once implemented
-                var claims = new List<Claim> { new(ClaimTypes.NameIdentifier, username) };
+                var claims = new List<Claim> {
+                    new(ClaimTypes.NameIdentifier, username)
+                };
                 var identity = new ClaimsIdentity(claims, "Token");
                 context.User = new ClaimsPrincipal(identity);
+                context.Items["sessionToken"] = sessionToken!;
             }
 
             // If no authorization header, still let request continue, as there are unauthenticated endpoints. Authenticated endpoints with [Authorize] attribute should block it
