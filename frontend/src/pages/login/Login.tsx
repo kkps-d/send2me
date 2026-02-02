@@ -10,9 +10,7 @@ export function Login() {
   const [password, setPassword] = useState<string>("");
   const [stayLoggedIn, setStayLoggedIn] = useState<boolean>(false);
 
-  const { user, login, logout, isLoading } = useAuth();
-
-  console.log(user);
+  const { login, isLoading } = useAuth();
 
   function onLogin() {
     login(username, password);
@@ -58,9 +56,6 @@ export function Login() {
           disabled={!(username && password)}
           icon={<span className="material-symbols-outlined">login</span>}
         />
-        <button onClick={logout}>Logout</button>
-        <div>User: </div>
-        <div>{JSON.stringify(user, null, 4)}</div>
       </div>
     </div>
   );
