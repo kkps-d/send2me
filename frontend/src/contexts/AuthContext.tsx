@@ -9,6 +9,7 @@ export type AuthContextType = {
   isLoading: boolean;
   login: (username: string, password: string) => Promise<void>;
   logout: () => Promise<void>;
+  authedFetch: (input: URL, init?: RequestInit) => Promise<Response>;
 };
 
 export const AuthContext = createContext<AuthContextType | undefined>(

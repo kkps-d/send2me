@@ -72,10 +72,41 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     await getUser();
   }
 
-  async function logout() {}
+  async function logout() {
+    setIsLoading(true);
+
+    try {
+      await fetch(`${BASE_URL}/api/v1/auth/logout`, {
+        method: "POST",
+        credentials: "include",
+      });
+
+      setUser(null);
+    } catch (e) {
+      console.error(e);
+    }
+
+    setIsLoading(false);
+  }
+
+  /** Wrapper to override init to include credentials, and also checks if response is 401 to automatically invalidate the token and make user null */
+  async function authedFetch(input: URL, init?: RequestInit) {
+    const res = await fetch(input, {
+      ...init,
+      credentials: "include",
+    });
+
+    if (res.status === 401) {
+      setUser(null);
+    }
+
+    return res;
+  }
 
   return (
-    <AuthContext.Provider value={{ user, isLoading, login, logout }}>
+    <AuthContext.Provider
+      value={{ user, isLoading, login, logout, authedFetch }}
+    >
       {children}
     </AuthContext.Provider>
   );
