@@ -5,12 +5,20 @@
   cursor: pointer;
   height: 38px;
   box-sizing: border-box;
-  padding: 0 6px;
+  padding: 0 7px 0 4px;
   transition: background-color 100ms;
   justify-content: center;
   user-select: none;
   background-color: transparent;
   border: 1px solid transparent;
+}
+
+.container.iconAfter {
+  padding: 0 4px 0 7px;
+}
+
+.container.noLabel {
+  padding: 0 7px;
 }
 
 .container:hover {

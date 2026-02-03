@@ -28,7 +28,7 @@ export function Button({
     <button
       onClick={onClick}
       tabIndex={tabIndex}
-      className={`${className} ${styles.container} ${disabled ? styles.disabled : ""}`}
+      className={`${className} ${styles.container} ${disabled ? styles.disabled : ""} ${iconPosition === "after" && styles.iconAfter} ${!label && styles.noLabel}`}
     >
       {iconPosition === "before" && _icon}
       {label}
