@@ -3,10 +3,14 @@ import { FlexSpacer } from "../FlexSpacer/FlexSpacer";
 import { getPreferredColorScheme } from "../../utils/getPreferredColorScheme";
 import { useState } from "react";
 import { Logo } from "../Logo/Logo";
+import { Button } from "../Button/Button";
+import { useAuth } from "../../contexts/AuthContext";
 
 export function Nav() {
+  const { user, isLoading } = useAuth();
+
   const [colorTheme, setColorTheme] = useState<"light" | "dark">(
-    getPreferredColorScheme()
+    getPreferredColorScheme(),
   );
 
   function toggleColorTheme() {
@@ -22,18 +26,30 @@ export function Nav() {
   return (
     <div className={`maxwidth basecontainer ${styles.nav}`}>
       <Logo />
+      <input
+        className={`baseinput ${styles.search}`}
+        type="search"
+        placeholder="Search..."
+      />
       <FlexSpacer />
-      <div className={`basebutton`}>
-        <span className="material-symbols-outlined">settings</span>
-      </div>
-      <div className={`basebutton`} onClick={toggleColorTheme}>
-        {colorTheme === "light" ? (
-          <span className="material-symbols-outlined">light_mode</span>
-        ) : (
-          <span className="material-symbols-outlined">dark_mode</span>
-        )}
-      </div>
-      <input className={`baseinput`} type="search" placeholder="Search..." />
+      <Button
+        icon={<span className="material-symbols-outlined">settings</span>}
+      />
+      <Button
+        onClick={toggleColorTheme}
+        icon={
+          colorTheme === "light" ? (
+            <span className="material-symbols-outlined">light_mode</span>
+          ) : (
+            <span className="material-symbols-outlined">dark_mode</span>
+          )
+        }
+      />
+      <Button
+        loading={isLoading}
+        icon={<span className="material-symbols-outlined">person</span>}
+        label={user?.username || "..."}
+      />
     </div>
   );
 }
