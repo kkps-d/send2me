@@ -41,11 +41,15 @@
 :root {
   /* Dimensions */
   --ui-max-width-px: 1000px;
+  --sb-size: 15px;
 
   /* Colors */
   color-scheme: light dark;
 
   --page-background-color: light-dark(white, black);
+
+  --sb-track-color: var(--page-background-color);
+  --sb-thumb-color: gray;
 
   --feed-message-background-color: light-dark(#eee, #1a1a1a);
   --feed-message-background-color-alt: light-dark(#ddd, #2a2a2a);
@@ -73,6 +77,27 @@
 
 .dark {
   color-scheme: dark;
+}
+
+*::-webkit-scrollbar {
+  width: var(--sb-size);
+}
+
+*::-webkit-scrollbar-track {
+  background: var(--sb-track-color);
+  border-radius: 11px;
+}
+
+*::-webkit-scrollbar-thumb {
+  background: var(--sb-thumb-color);
+  border-radius: 11px;
+  border: 5px solid var(--sb-track-color);
+}
+
+@supports not selector(::-webkit-scrollbar) {
+  body {
+    scrollbar-color: var(--sb-thumb-color) var(--sb-track-color);
+  }
 }
 
 * {
