@@ -13,6 +13,14 @@
   border: 1px solid transparent;
 }
 
+.container.alignLeft {
+  justify-content: start;
+}
+
+.container.alignRight {
+  justify-content: end;
+}
+
 .container.iconAfter {
   padding: 0 4px 0 7px;
 }

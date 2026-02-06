@@ -1,7 +1,8 @@
+import type { Ref } from "react";
 import { Spinner } from "../Spinner/Spinner";
 import styles from "./Button.module.css";
 
-type ButtonProps = {
+export type ButtonProps = {
   label?: string;
   onClick?: () => void;
   className?: string;
@@ -10,6 +11,9 @@ type ButtonProps = {
   icon?: React.ReactNode;
   iconPosition?: "before" | "after";
   disabled?: boolean;
+  align?: "center" | "left" | "right";
+  color?: string;
+  ref?: Ref<HTMLButtonElement>;
 };
 
 export function Button({
@@ -21,14 +25,36 @@ export function Button({
   icon,
   iconPosition = "before",
   disabled = false,
+  align = "center",
+  color,
+  ref,
 }: ButtonProps) {
   const _icon = loading ? <Spinner /> : icon || null;
+
+  let alignClass = "";
+
+  if (align === "left") {
+    alignClass = styles.alignLeft;
+  } else if (align === "right") {
+    alignClass = styles.alignRight;
+  }
+
+  const buttonClassNames = [
+    styles.container,
+    className ? className : "",
+    disabled ? styles.disabled : "",
+    iconPosition === "after" ? styles.iconAfter : "",
+    !label ? styles.noLabel : "",
+    alignClass,
+  ];
 
   return (
     <button
       onClick={onClick}
       tabIndex={tabIndex}
-      className={`${className} ${styles.container} ${disabled ? styles.disabled : ""} ${iconPosition === "after" && styles.iconAfter} ${!label && styles.noLabel}`}
+      className={buttonClassNames.join(" ")}
+      style={color ? { color } : {}}
+      ref={ref}
     >
       {iconPosition === "before" && _icon}
       {label}
