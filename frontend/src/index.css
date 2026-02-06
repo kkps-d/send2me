@@ -61,7 +61,10 @@
   --button-hovered-background-color: light-dark(lightgray, #333);
   --button-disabled-color: gray;
 
-  /* Presets */
+  --modal-background-color: light-dark(white, black);
+  --modal-border-color: light-dark(black, white);
+
+  --context-menu-item-bottom-border-color: gray;
 }
 
 .light {
@@ -75,6 +78,8 @@
 * {
   font-family: Inter;
   font-size: 1rem;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
 html,
@@ -90,6 +95,7 @@ body,
   display: flex;
   flex-direction: column;
   background-color: var(--page-background-color);
+  z-index: 0;
 }
 
 .maxwidth {
