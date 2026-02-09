@@ -1,10 +1,13 @@
 import { useState, useEffect, type ReactNode } from "react";
 import { AuthContext, type User } from "./AuthContext";
 import { BASE_URL } from "../utils/baseUrl";
+import { LoginError, type LoginResult } from "../types/Results/LoginResult";
+import { Spinner } from "../components/Spinner/Spinner";
+import { awaitSleep } from "../utils/awaitSleep";
 
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [user, setUser] = useState<User | null>(null);
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
 
   /**
    * TODO: Probably need to convert this to tanstack query to periodically check if the user is stil logged in in the background.
@@ -29,7 +32,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
       const user = await res.json();
       setUser(user);
-      console.log(user);
+      await awaitSleep(5); // temp
     } catch (err) {
       console.error(err);
     } finally {
@@ -41,35 +44,55 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     getUser();
   }, []);
 
+  if (isLoading) {
+    return <Spinner fontSize="3rem" fullscreen />;
+  }
+
   async function login(username: string, password: string) {
     setIsLoading(true);
-    const res = await fetch(`${BASE_URL}/api/v1/auth/login`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Accept: "text/html",
-      },
-      body: JSON.stringify({
-        username,
-        password,
-      }),
-      credentials: "include",
-    });
 
-    if (!res.ok) {
-      if (res.status === 401) {
-        console.error("Wrong credentials");
-        // TODO: Wrong credentials, show error popup
-      } else {
-        console.error("Unknown error");
-        console.error(res);
-        // TODO: Unknown error, show error popup
+    const result: LoginResult = {
+      success: true,
+      errorType: null,
+      payload: null,
+      rawError: null,
+    };
+
+    try {
+      const res = await fetch(`${BASE_URL}/api/v1/auth/login`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "text/html",
+        },
+        body: JSON.stringify({
+          username,
+          password,
+        }),
+        credentials: "include",
+      });
+
+      if (!res.ok) {
+        if (res.status === 401) {
+          result.success = false;
+          result.errorType = LoginError.WRONG_CREDENTIALS;
+        } else {
+          result.success = false;
+          result.errorType = LoginError.UNKNOWN_ERROR;
+          result.rawError = new Error("Unknown HTTP Code", { cause: { res } });
+        }
+        setIsLoading(false);
+        return result;
       }
-      setIsLoading(false);
-      return;
+
+      await getUser();
+    } catch (err) {
+      result.success = false;
+      result.errorType = LoginError.UNKNOWN_ERROR;
+      result.rawError = err;
     }
 
-    await getUser();
+    return result;
   }
 
   async function logout() {

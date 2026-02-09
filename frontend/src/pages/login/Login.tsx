@@ -3,17 +3,20 @@ import { Checkbox } from "../../components/Checkbox/Checkbox";
 import { Logo } from "../../components/Logo/Logo";
 import styles from "./Login.module.css";
 import { Button } from "../../components/Button/Button";
-import { useAuth } from "../../contexts/AuthContext";
+import { Route } from "../../routes/login";
 
 export function Login() {
+  const { auth } = Route.useRouteContext();
+  const navigate = Route.useNavigate();
   const [username, setUsername] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const [stayLoggedIn, setStayLoggedIn] = useState<boolean>(false);
 
-  const { login, isLoading } = useAuth();
-
-  function onLogin() {
-    login(username, password);
+  async function onLogin() {
+    const result = await auth.login(username, password);
+    if (result.success) {
+      navigate({ to: "/" });
+    }
   }
 
   return (
@@ -52,7 +55,7 @@ export function Login() {
           tabIndex={4}
           onClick={onLogin}
           label="Login"
-          loading={isLoading}
+          loading={auth.isLoading}
           disabled={!(username && password)}
           icon={<span className="material-symbols-outlined">login</span>}
         />
