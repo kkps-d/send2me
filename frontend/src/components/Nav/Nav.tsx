@@ -12,6 +12,7 @@ import type { LogoutResult } from "../../types/Results/auth/LogoutResult";
 export function Nav() {
   const { auth } = Route.useRouteContext();
   const { user, isLoading, logout } = auth;
+  const navigate = Route.useNavigate();
   const buttonRef = useRef<HTMLButtonElement>(null);
   const [overlay, setOverlay] = useState<React.ReactNode>(null);
 
@@ -34,6 +35,7 @@ export function Nav() {
       <UserContextMenu
         buttonRef={buttonRef}
         onClose={() => setOverlay(null)}
+        navigateToSettings={() => navigate({ to: "/settings" })}
         logout={logout}
       />,
     );
@@ -48,9 +50,6 @@ export function Nav() {
         placeholder="Search..."
       />
       <FlexSpacer />
-      <Button
-        icon={<span className="material-symbols-outlined">settings</span>}
-      />
       <Button
         onClick={toggleColorTheme}
         icon={
@@ -77,16 +76,22 @@ type UserContextMenuProps = {
   buttonRef: RefObject<HTMLButtonElement | null>;
   onClose?: () => void;
   logout?: () => Promise<LogoutResult>;
+  navigateToSettings?: () => void;
 };
 
-function UserContextMenu({ buttonRef, onClose, logout }: UserContextMenuProps) {
+function UserContextMenu({
+  buttonRef,
+  onClose,
+  logout,
+  navigateToSettings,
+}: UserContextMenuProps) {
   return (
     <Overlay onClose={onClose}>
       <ContextMenu anchorRef={buttonRef} anchorPosition="right">
         <ContextMenuItem
           label="Settings"
           icon={<span className="material-symbols-outlined">settings</span>}
-          onClick={() => console.log("ZAZA")}
+          onClick={navigateToSettings}
         />
         <ContextMenuItem
           label="Sign out"
