@@ -6,7 +6,7 @@ import { Logo } from "../Logo/Logo";
 import { Button } from "../Button/Button";
 import { Overlay } from "../Overlay/Overlay";
 import { ContextMenu, ContextMenuItem } from "../Overlay/Modals/ContextMenu";
-import { Route } from "../../routes/_authenticated/__root";
+import { Route } from "../../routes/_authenticated/index";
 import type { LogoutResult } from "../../types/Results/auth/LogoutResult";
 
 export function Nav() {
