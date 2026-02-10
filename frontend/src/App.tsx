@@ -1,4 +1,3 @@
-import { StrictMode } from "react";
 import { useAuth } from "./contexts/AuthContext";
 import { RouterProvider } from "@tanstack/react-router";
 import { router } from "./router";
@@ -11,10 +10,8 @@ function InnerApp() {
 
 export function App() {
   return (
-    <StrictMode>
-      <AuthProvider>
-        <InnerApp />
-      </AuthProvider>
-    </StrictMode>
+    <AuthProvider>
+      <InnerApp />
+    </AuthProvider>
   );
 }
