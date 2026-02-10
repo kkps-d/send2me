@@ -4,12 +4,14 @@ import { getPreferredColorScheme } from "../../utils/getPreferredColorScheme";
 import { useRef, useState, type RefObject } from "react";
 import { Logo } from "../Logo/Logo";
 import { Button } from "../Button/Button";
-import { useAuth } from "../../contexts/AuthContext";
 import { Overlay } from "../Overlay/Overlay";
 import { ContextMenu, ContextMenuItem } from "../Overlay/Modals/ContextMenu";
+import { Route } from "../../routes/_authenticated/__root";
+import type { LogoutResult } from "../../types/Results/auth/LogoutResult";
 
 export function Nav() {
-  const { user, isLoading } = useAuth();
+  const { auth } = Route.useRouteContext();
+  const { user, isLoading, logout } = auth;
   const buttonRef = useRef<HTMLButtonElement>(null);
   const [overlay, setOverlay] = useState<React.ReactNode>(null);
 
@@ -32,6 +34,7 @@ export function Nav() {
       <UserContextMenu
         buttonRef={buttonRef}
         onClose={() => setOverlay(null)}
+        logout={logout}
       />,
     );
   }
@@ -73,9 +76,10 @@ export function Nav() {
 type UserContextMenuProps = {
   buttonRef: RefObject<HTMLButtonElement | null>;
   onClose?: () => void;
+  logout?: () => Promise<LogoutResult>;
 };
 
-function UserContextMenu({ buttonRef, onClose }: UserContextMenuProps) {
+function UserContextMenu({ buttonRef, onClose, logout }: UserContextMenuProps) {
   return (
     <Overlay onClose={onClose}>
       <ContextMenu anchorRef={buttonRef} anchorPosition="right">
@@ -88,6 +92,7 @@ function UserContextMenu({ buttonRef, onClose }: UserContextMenuProps) {
           label="Sign out"
           color="#FF3B30"
           icon={<span className="material-symbols-outlined">logout</span>}
+          onClick={logout}
         />
       </ContextMenu>
     </Overlay>

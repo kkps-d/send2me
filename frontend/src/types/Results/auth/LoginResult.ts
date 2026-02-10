@@ -1,4 +1,4 @@
-import type { BaseResult } from "./BaseResult";
+import type { BaseResult } from "../BaseResult";
 
 export const LoginError = {
   WRONG_CREDENTIALS: "WRONG_CREDENTIALS",

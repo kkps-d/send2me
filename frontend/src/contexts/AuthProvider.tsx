@@ -1,9 +1,16 @@
 import { useState, useEffect, type ReactNode } from "react";
 import { AuthContext, type User } from "./AuthContext";
 import { BASE_URL } from "../utils/baseUrl";
-import { LoginError, type LoginResult } from "../types/Results/LoginResult";
+import {
+  LoginError,
+  type LoginResult,
+} from "../types/Results/auth/LoginResult";
 import { Spinner } from "../components/Spinner/Spinner";
 import { awaitSleep } from "../utils/awaitSleep";
+import {
+  LogoutError,
+  type LogoutResult,
+} from "../types/Results/auth/LogoutResult";
 
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [user, setUser] = useState<User | null>(null);
@@ -32,7 +39,6 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
       const user = await res.json();
       setUser(user);
-      await awaitSleep(5); // temp
     } catch (err) {
       console.error(err);
     } finally {
@@ -92,24 +98,45 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       result.rawError = err;
     }
 
+    setIsLoading(false);
     return result;
   }
 
   async function logout() {
     setIsLoading(true);
 
+    const result: LogoutResult = {
+      success: true,
+      errorType: null,
+      payload: null,
+      rawError: null,
+    };
+
     try {
-      await fetch(`${BASE_URL}/api/v1/auth/logout`, {
+      const res = await fetch(`${BASE_URL}/api/v1/auth/logout`, {
         method: "POST",
         credentials: "include",
       });
 
+      if (!res.ok) {
+        if (res.status === 401) {
+          result.success = false;
+          result.errorType = LogoutError.UNKNOWN_ERROR;
+          result.rawError = new Error("Unknown HTTP Code", { cause: { res } });
+        }
+        setIsLoading(false);
+        return result;
+      }
+
       setUser(null);
-    } catch (e) {
-      console.error(e);
+    } catch (err) {
+      result.success = false;
+      result.errorType = LogoutError.UNKNOWN_ERROR;
+      result.rawError = err;
     }
 
     setIsLoading(false);
+    return result;
   }
 
   /** Wrapper to override init to include credentials, and also checks if response is 401 to automatically invalidate the token and make user null */
