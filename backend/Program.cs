@@ -29,6 +29,12 @@ namespace backend
                     builderOptions.UseSqlite($"Data Source={appIdentityDbPath}");
                 }
             );
+            builder.Services.AddDbContext<AppDataDbContext>(
+                builderOptions =>
+                {
+                    builderOptions.UseSqlite($"Data Source={appDataDbPath}");
+                }
+            );
             // Auth
             builder.Services.AddAuthorization();
             builder.Services.AddIdentity<IdentityUser, IdentityRole>(options =>
