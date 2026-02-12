@@ -6,7 +6,7 @@ namespace backend.Controllers.Message
     [Route("api/v1/messages")]
     [ApiController]
     [Authorize]
-    public class MessageController : ControllerBase
+    public class MessagesController : ControllerBase
     {
         [HttpGet("", Name = "GetMessages")]
         public async Task<IActionResult> GetMessages()
