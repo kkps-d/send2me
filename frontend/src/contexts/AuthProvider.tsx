@@ -6,7 +6,6 @@ import {
   type LoginResult,
 } from "../types/Results/auth/LoginResult";
 import { Spinner } from "../components/Spinner/Spinner";
-import { awaitSleep } from "../utils/awaitSleep";
 import {
   LogoutError,
   type LogoutResult,
