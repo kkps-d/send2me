@@ -1,6 +1,5 @@
 import styles from "./Nav.module.css";
 import { FlexSpacer } from "../FlexSpacer/FlexSpacer";
-import { getPreferredColorScheme } from "../../utils/getPreferredColorScheme";
 import { useRef, useState, type RefObject } from "react";
 import { Logo } from "../Logo/Logo";
 import { Button } from "../Button/Button";
@@ -8,6 +7,7 @@ import { Overlay } from "../Overlay/Overlay";
 import { ContextMenu, ContextMenuItem } from "../Overlay/Modals/ContextMenu";
 import { Route } from "../../routes/_authenticated/index";
 import type { LogoutResult } from "../../types/Results/auth/LogoutResult";
+import { useTheme } from "../../contexts/ThemeContext";
 
 export function Nav() {
   const { auth } = Route.useRouteContext();
@@ -16,19 +16,7 @@ export function Nav() {
   const buttonRef = useRef<HTMLButtonElement>(null);
   const [overlay, setOverlay] = useState<React.ReactNode>(null);
 
-  const [colorTheme, setColorTheme] = useState<"light" | "dark">(
-    getPreferredColorScheme(),
-  );
-
-  function toggleColorTheme() {
-    setColorTheme((curr) => {
-      const theme = curr === "light" ? "dark" : "light";
-
-      document.documentElement.classList.remove("light", "dark");
-      document.documentElement.classList.add(theme);
-      return theme;
-    });
-  }
+  const { theme, toggleTheme } = useTheme();
 
   function onClickUserBtn() {
     setOverlay(
@@ -51,9 +39,9 @@ export function Nav() {
       />
       <FlexSpacer />
       <Button
-        onClick={toggleColorTheme}
+        onClick={toggleTheme}
         icon={
-          colorTheme === "light" ? (
+          theme === "light" ? (
             <span className="material-symbols-outlined">light_mode</span>
           ) : (
             <span className="material-symbols-outlined">dark_mode</span>
