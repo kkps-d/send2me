@@ -1,5 +1,6 @@
 using backend.DbContexts;
 using backend.Middlewares;
+using backend.Services.App;
 using backend.Services.Auth;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -53,6 +54,7 @@ namespace backend
             .AddDefaultTokenProviders();
             builder.Services.AddSingleton<ITokenStore, InMemoryTokenStore>();
             builder.Services.AddScoped<AuthnService>();
+            builder.Services.AddScoped<MessagesService>();
             // Route Controllers + Swagger
             builder.Services.AddControllers();
             builder.Services.AddEndpointsApiExplorer(); // Scans app for APIs and produces metadata
