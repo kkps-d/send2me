@@ -14,7 +14,7 @@ namespace backend.Controllers
         {
             string? username = Request.HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier);
 
-            if (string.IsNullOrEmpty(username))
+            if (string.IsNullOrWhiteSpace(username))
             {
                 return StatusCode(500);
             }

@@ -24,7 +24,7 @@ namespace backend.Middlewares
                 username = await authnService.GetUsernameFromToken(sessionToken);
             }
 
-            if (!string.IsNullOrEmpty(username))
+            if (!string.IsNullOrWhiteSpace(username))
             {
                 // TODO: Later fetch more claims for permissions from AuthzService once implemented
                 var claims = new List<Claim> {
