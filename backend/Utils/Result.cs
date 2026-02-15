@@ -4,7 +4,7 @@
     {
         public bool IsSuccess { get; }
         public SuccessPayloadType? Payload { get; }
-        public ErrorCodeType? ErrorCode {  get; }
+        public ErrorCodeType? ErrorCode { get; }
         public ErrorPayloadType? ErrorPayload { get; }
 
         private Result(SuccessPayloadType payload)
