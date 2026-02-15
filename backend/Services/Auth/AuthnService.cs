@@ -26,6 +26,16 @@ namespace backend.Services.Auth
             return RegisterResult.Success(username);
         }
 
+        public async Task<bool> DoesUserExist(string username)
+        {
+            if (string.IsNullOrWhiteSpace(username))
+            {
+                return false;
+            }
+            IdentityUser? user = await _userManager.FindByNameAsync(username);
+            return user != null;
+        }
+
         public async Task<CreateSessionResult> CreateSession(string username, string password)
         {
             IdentityUser? user = await _userManager.FindByNameAsync(username);
