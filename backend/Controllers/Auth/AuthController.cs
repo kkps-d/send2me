@@ -39,7 +39,7 @@ namespace backend.Controllers.Auth
             }
 
             string sessionToken = result.Payload!;
-            bool wantsCookie = Request.Headers.Accept.Any(h => h.Contains("text/html"));
+            bool wantsCookie = Request.Headers.Accept.Any(h => h!.Contains("text/html"));
 
             if (wantsCookie)
             {
@@ -76,4 +76,18 @@ namespace backend.Controllers.Auth
             return Ok();
         }
     }
+
+    #region Related DTOs
+    public class LoginDto
+    {
+        public string UserName { get; set; } = null!;
+        public string Password { get; set; } = null!;
+    }
+
+    public class RegisterDto
+    {
+        public string UserName { get; set; } = null!;
+        public string Password { get; set; } = null!;
+    }
+    #endregion
 }
