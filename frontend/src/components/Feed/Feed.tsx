@@ -9,8 +9,7 @@ export function Feed() {
   let lastDate: string | null = null;
 
   if (messages) {
-    for (let i = 0; i < messages.length; i++) {
-      const msg = messages[i];
+    for (const msg of messages) {
       const date = msg.createdAt.toLocaleString("default", {
         month: "long",
         day: "2-digit",
@@ -20,7 +19,7 @@ export function Feed() {
       if (!lastDate) {
         lastDate = date;
       } else if (lastDate != date) {
-        components.push(<DateDivider key={i} dateString={date} />);
+        components.push(<DateDivider key={date} dateString={date} />);
         lastDate = date;
       }
       components.push(<FeedMessage key={msg.messageId} message={msg} />);
