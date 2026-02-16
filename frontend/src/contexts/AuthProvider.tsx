@@ -138,8 +138,8 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     return result;
   }
 
-  /** Wrapper to override init to include credentials, and also checks if response is 401 to automatically invalidate the token and make user null */
-  async function authedFetch(input: URL, init?: RequestInit) {
+  /** a(uthed)Fetch. Wrapper to override init to include credentials, and also checks if response is 401 to automatically invalidate the token and make user null */
+  async function aFetch(input: RequestInfo | URL, init?: RequestInit) {
     const res = await fetch(input, {
       ...init,
       credentials: "include",
@@ -153,9 +153,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   }
 
   return (
-    <AuthContext.Provider
-      value={{ user, isLoading, login, logout, authedFetch }}
-    >
+    <AuthContext.Provider value={{ user, isLoading, login, logout, aFetch }}>
       {children}
     </AuthContext.Provider>
   );

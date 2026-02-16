@@ -11,7 +11,7 @@ export type AuthContextType = {
   isLoading: boolean;
   login: (username: string, password: string) => Promise<LoginResult>;
   logout: () => Promise<LogoutResult>;
-  authedFetch: (input: URL, init?: RequestInit) => Promise<Response>;
+  aFetch: (input: RequestInfo | URL, init?: RequestInit) => Promise<Response>;
 };
 
 export const AuthContext = createContext<AuthContextType | undefined>(
