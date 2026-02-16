@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Checkbox } from "../../components/Checkbox/Checkbox";
+// import { Checkbox } from "../../components/Checkbox/Checkbox";
 import { Logo } from "../../components/Logo/Logo";
 import styles from "./Login.module.css";
 import { Button } from "../../components/Button/Button";
@@ -10,7 +10,7 @@ export function Login() {
   const navigate = Route.useNavigate();
   const [username, setUsername] = useState<string>("");
   const [password, setPassword] = useState<string>("");
-  const [stayLoggedIn, setStayLoggedIn] = useState<boolean>(false);
+  // const [stayLoggedIn, setStayLoggedIn] = useState<boolean>(false);
 
   async function onLogin() {
     const result = await auth.login(username, password);
@@ -45,14 +45,14 @@ export function Login() {
             tabIndex={2}
           />
         </div>
-        <Checkbox
+        {/* <Checkbox
           label="Stay logged in"
           tabIndex={3}
           checked={stayLoggedIn}
           setChecked={setStayLoggedIn}
-        />
+        /> */}
         <Button
-          tabIndex={4}
+          tabIndex={3}
           onClick={onLogin}
           label="Login"
           loading={auth.isLoading}
