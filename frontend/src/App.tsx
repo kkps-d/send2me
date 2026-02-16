@@ -3,6 +3,9 @@ import { RouterProvider } from "@tanstack/react-router";
 import { router } from "./router";
 import { AuthProvider } from "./contexts/AuthProvider";
 import { ThemeProvider } from "./contexts/ThemeProvider";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+
+const queryClient = new QueryClient();
 
 function InnerApp() {
   const auth = useAuth();
@@ -11,10 +14,12 @@ function InnerApp() {
 
 export function App() {
   return (
-    <ThemeProvider>
-      <AuthProvider>
-        <InnerApp />
-      </AuthProvider>
-    </ThemeProvider>
+    <QueryClientProvider client={queryClient}>
+      <ThemeProvider>
+        <AuthProvider>
+          <InnerApp />
+        </AuthProvider>
+      </ThemeProvider>
+    </QueryClientProvider>
   );
 }
