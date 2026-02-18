@@ -166,6 +166,20 @@ body,
   height: 38px;
 }
 
+.basetextarea {
+  box-sizing: border-box;
+  border: none;
+  border-bottom: 1px solid var(--input-border-color);
+  background-color: var(--input-background-color);
+  padding: 8px 8px 9px;
+
+  resize: none;
+  field-sizing: content;
+  max-height: 118px;
+  overflow-y: auto;
+  box-sizing: border-box;
+}
+
 .baseinput[type="checkbox"] {
   cursor: pointer;
   margin: 10px 0;
