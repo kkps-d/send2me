@@ -18,6 +18,28 @@ namespace backend.Services.App
             return await db.Messages.ToListAsync();
         }
 
+        public async Task<GetMessagesResult> GetMessages(string username, int? fromId, int pageSize)
+        {
+            bool userExists = await _authnService.DoesUserExist(username);
+            if (!userExists)
+            {
+                return GetMessagesResult.Failure(MessagesServiceErrorCode.InvalidUserId, None.Value);
+            }
+
+            IQueryable<Message> query = db.Messages
+                .Where(m => m.UserId == username)
+                .OrderByDescending(m => m.MessageId);
+
+            if (fromId.HasValue)
+            {
+                query = query.Where(m => m.MessageId <=  fromId.Value);
+            }
+
+            List<Message> result = await query.Take(pageSize).ToListAsync();
+
+            return GetMessagesResult.Success(result);
+        }
+
         public async Task<CreateMessageResult> CreateMessage(string username, string content)
         {
             if (string.IsNullOrWhiteSpace(content))

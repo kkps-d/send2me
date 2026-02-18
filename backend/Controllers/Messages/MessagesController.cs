@@ -16,10 +16,20 @@ namespace backend.Controllers.Messages
         private readonly MessagesService _messagesService = messagesService;
 
         [HttpGet("", Name = "GetMessages")]
-        public async Task<IActionResult> GetMessages()
+        public async Task<IActionResult> GetMessages([FromQuery] int? fromId, [FromQuery] int? pageSize)
         {
-            List<Message> messages = await _messagesService.GetMessages();
-            List<MessageDto> messageDtos = messages.Select(m => new MessageDto
+            int _pageSize = pageSize ?? 25;
+            string username = Request.HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier)!;
+
+            GetMessagesResult result = await _messagesService.GetMessages(username, fromId, _pageSize);
+
+            if (!result.IsSuccess)
+            {
+                // Only case is user does not exist, which shouldn't happen
+                return StatusCode(500);
+            }
+
+            List<MessageDto> messageDtos = result.Payload!.Select(m => new MessageDto
             {
                 MessageId = m.MessageId,
                 Content = m.Content,
@@ -28,7 +38,9 @@ namespace backend.Controllers.Messages
 
             MessagesResponse messagesResponse = new()
             {
-                NextCursor = "cursor",
+                // Check GetMessages implementation, id filter is inclusive, so subtract 1.
+                // cursor should be left as string so future changes don't require frontend changes
+                NextCursor = $"{messageDtos.First().MessageId - 1}", 
                 Messages = messageDtos
             };
 
