@@ -1,7 +1,9 @@
 import styles from "./Feed.module.css";
 import { useMessages, type MessageDto } from "../../queries/useMessages";
+import { useEffect, useRef } from "react";
 
 export function Feed() {
+  const anchorRef = useRef<HTMLAnchorElement>(null);
   const { messages } = useMessages();
 
   const components = [];
@@ -26,10 +28,13 @@ export function Feed() {
     }
   }
 
+  useEffect(() => anchorRef.current?.scrollIntoView(), [messages]);
+
   return (
     <div className={styles.container}>
       {components}
       <br />
+      <a ref={anchorRef}></a>
     </div>
   );
 }
