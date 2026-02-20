@@ -36,6 +36,7 @@ namespace backend.Services.App
             }
 
             List<Message> result = await query.Take(pageSize).ToListAsync();
+            result.Reverse();
 
             return GetMessagesResult.Success(result);
         }

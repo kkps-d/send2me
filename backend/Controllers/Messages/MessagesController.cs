@@ -16,12 +16,12 @@ namespace backend.Controllers.Messages
         private readonly MessagesService _messagesService = messagesService;
 
         [HttpGet("", Name = "GetMessages")]
-        public async Task<IActionResult> GetMessages([FromQuery] int? fromId, [FromQuery] int? pageSize)
+        public async Task<IActionResult> GetMessages([FromQuery] int? cursor, [FromQuery] int? pageSize)
         {
             int _pageSize = pageSize ?? 25;
             string username = Request.HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier)!;
 
-            GetMessagesResult result = await _messagesService.GetMessages(username, fromId, _pageSize);
+            GetMessagesResult result = await _messagesService.GetMessages(username, cursor, _pageSize);
 
             if (!result.IsSuccess)
             {
