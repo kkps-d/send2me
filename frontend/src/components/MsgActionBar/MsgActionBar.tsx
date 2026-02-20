@@ -1,4 +1,4 @@
-import { useRef, useState } from "react";
+import { useState } from "react";
 import { Button } from "../Button/Button";
 import { FlexSpacer } from "../FlexSpacer/FlexSpacer";
 import styles from "./MsgActionBar.module.css";

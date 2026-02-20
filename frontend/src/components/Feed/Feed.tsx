@@ -39,9 +39,6 @@ export function Feed() {
   );
 }
 
-const placeholder =
-  "This is an example of a text only message that the user sent, this text is able to be a single line message, or can wrap into multiple lines.\n\nA user can edit or delete a text message using the context menu button below. Other types of messsages can have additional context menu items.\n\nIn the future, the context menu will also contain a “Create cURL link” feature to easily download text or file content via the command line.";
-
 type FeedMessageProps = {
   message: MessageDto;
 };

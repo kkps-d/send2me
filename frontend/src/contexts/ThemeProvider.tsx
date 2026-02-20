@@ -20,7 +20,6 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
   useEffect(() => {
     document.documentElement.classList.remove("light", "dark");
     document.documentElement.classList.add(storedValue);
-    console.log(storedValue);
   }, [storedValue]);
 
   return (
