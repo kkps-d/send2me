@@ -11,6 +11,8 @@
   border-radius: 50%;
   background: conic-gradient(from 0deg, rgba(255, 255, 255, 0), white);
 
+  background-color: light-dark(black, rgba(0, 0, 0, 0));
+
   /* cut out the center to make it a ring */
   -webkit-mask: radial-gradient(
     farthest-side,
