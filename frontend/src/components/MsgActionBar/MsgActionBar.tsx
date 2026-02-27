@@ -2,12 +2,12 @@ import { useState } from "react";
 import { Button } from "../Button/Button";
 import { FlexSpacer } from "../FlexSpacer/FlexSpacer";
 import styles from "./MsgActionBar.module.css";
-import { useMessages } from "../../queries/useMessages";
+import { useCreateMessage } from "../../queries/useCreateMessage";
 
 export function MsgActionBar() {
   const [text, setText] = useState("");
 
-  const { createMessage } = useMessages();
+  const { createMessage } = useCreateMessage();
 
   function onSend() {
     // TODO: Need to figure out the scroll to bottom logic

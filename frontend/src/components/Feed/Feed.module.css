@@ -53,3 +53,10 @@
 .feedMessageButtonSeparator::before {
   content: "•";
 }
+
+.loadingSpace {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 50px;
+}

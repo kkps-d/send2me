@@ -1,10 +1,14 @@
 import styles from "./Feed.module.css";
 import { useMessages, type MessageDto } from "../../queries/useMessages";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
+import { Spinner } from "../Spinner/Spinner";
+
+let renderCount = 0;
 
 export function Feed() {
+  const feedRef = useRef<HTMLDivElement>(null);
   const anchorRef = useRef<HTMLAnchorElement>(null);
-  const { messages } = useMessages();
+  const { messages, queryLoading } = useMessages();
 
   const components = [];
 
@@ -28,10 +32,36 @@ export function Feed() {
     }
   }
 
-  useEffect(() => anchorRef.current?.scrollIntoView(), [messages]);
+  console.log(renderCount++);
+  console.log(messages);
+
+  // useEffect(() => anchorRef.current?.scrollIntoView(), [messages]);
+
+  // useEffect(() => {
+  //   const elm = feedRef.current;
+  //   if (!elm) {
+  //     return;
+  //   }
+
+  //   function onScroll() {
+  //     console.log("scroll", elm!.scrollTop);
+  //   }
+
+  //   elm.addEventListener("scroll", onScroll);
+
+  //   return () => {
+  //     elm.removeEventListener("scroll", onScroll);
+  //   };
+  // }, []);
 
   return (
-    <div className={styles.container}>
+    <div className={styles.container} ref={feedRef}>
+      {queryLoading && (
+        <div className={styles.loadingSpace}>
+          <Spinner fontSize="1.5rem" />
+        </div>
+      )}
+
       {components}
       <br />
       <a ref={anchorRef}></a>
